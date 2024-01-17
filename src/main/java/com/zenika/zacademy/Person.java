@@ -10,8 +10,8 @@ public abstract class Person {
     public String email;
 
     public Person(String firstName, String lastName, String phoneNumber, String address, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.firstName = firstName.toLowerCase();
+        this.lastName = lastName.toLowerCase();
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.email = email;

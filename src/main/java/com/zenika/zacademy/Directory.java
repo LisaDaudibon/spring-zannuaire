@@ -13,4 +13,15 @@ public class Directory {
     public void addUnique(Person newPerson) {
         persons.add(newPerson);
     }
+
+    public Person searchByName(String searchedName) {
+        String searchNameLowerCase = searchedName.toLowerCase();
+        for (Person currentPerson : persons) {
+            if (searchNameLowerCase.contains(currentPerson.firstName) || searchNameLowerCase.contains(currentPerson.lastName)) {
+                return currentPerson;
+            }
+        }
+        return null;
+    }
+
 }

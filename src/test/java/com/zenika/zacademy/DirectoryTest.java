@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DirectoryTest {
@@ -44,6 +45,45 @@ class DirectoryTest {
             directory.addUnique(karine);
             directory.addUnique(karine);
             assertEquals(1, directory.getPersons().size());
+        }
+    }
+
+    @Nested
+    class searchByName {
+
+        @Test
+        void shouldReturnPersonByFirstNameIfExists() {
+            directory.addUnique(karine);
+            Person personFound = directory.searchByName("Karine");
+            assertEquals(karine, personFound);
+        }
+
+        @Test
+        void shouldReturnPersonByLastNameIfExists() {
+            directory.addUnique(karine);
+            Person personFound = directory.searchByName("Sabatier");
+            assertEquals(karine, personFound);
+        }
+
+        @Test
+        void shouldReturnPersonByFirstNameAndLastNameIfExists() {
+            directory.addUnique(karine);
+            Person personFound = directory.searchByName("Karine Sabatier");
+            assertEquals(karine, personFound);
+        }
+
+        @Test
+        void shouldReturnPersonByFirstNameAndLastNameWithoutCaseSensitiveIfExists() {
+            directory.addUnique(karine);
+            Person personFound = directory.searchByName("KarINe SABatier");
+            assertEquals(karine, personFound);
+        }
+
+        @Test
+        void shouldReturnNullIfPersonNotFound() {
+            directory.addUnique(karine);
+            Person personFound = directory.searchByName("Xavier");
+            assertNull(personFound);
         }
     }
 }
