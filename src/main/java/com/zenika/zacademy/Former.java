@@ -8,12 +8,11 @@ public class Former extends Person {
 
     @Override
     public String toString() {
-        return "Former{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", address='" + address + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+        return String.format("""
+                Formateur %s %s
+                📱: %s
+                📧: %s
+                🏠: %s
+                """, this.firstName, this.lastName, this.phoneNumber, this.email, this.address);
     }
 }

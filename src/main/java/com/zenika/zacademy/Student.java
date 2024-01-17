@@ -7,12 +7,11 @@ public class Student extends Person {
 
     @Override
     public String toString() {
-        return "Student{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", address='" + address + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+        return String.format("""
+                Élève %s %s
+                📱: %s
+                📧: %s
+                🏠: %s
+                """, this.firstName, this.lastName, this.phoneNumber, this.email, this.address);
     }
 }
