@@ -6,8 +6,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DirectoryTest {
@@ -54,36 +55,36 @@ class DirectoryTest {
         @Test
         void shouldReturnPersonByFirstNameIfExists() {
             directory.addUnique(karine);
-            Person personFound = directory.searchByName("Karine");
-            assertEquals(karine, personFound);
+            Optional<Person> personFound = directory.searchByName("Karine");
+            assertEquals(karine, personFound.get());
         }
 
         @Test
         void shouldReturnPersonByLastNameIfExists() {
             directory.addUnique(karine);
-            Person personFound = directory.searchByName("Sabatier");
-            assertEquals(karine, personFound);
+            Optional<Person> personFound = directory.searchByName("Sabatier");
+            assertEquals(karine, personFound.get());
         }
 
         @Test
         void shouldReturnPersonByFirstNameAndLastNameIfExists() {
             directory.addUnique(karine);
-            Person personFound = directory.searchByName("Karine Sabatier");
-            assertEquals(karine, personFound);
+            Optional<Person> personFound = directory.searchByName("Karine Sabatier");
+            assertEquals(karine, personFound.get());
         }
 
         @Test
         void shouldReturnPersonByFirstNameAndLastNameWithoutCaseSensitiveIfExists() {
             directory.addUnique(karine);
-            Person personFound = directory.searchByName("KarINe SABatier");
-            assertEquals(karine, personFound);
+            Optional<Person> personFound = directory.searchByName("KarINe SABatier");
+            assertEquals(karine, personFound.get());
         }
 
         @Test
         void shouldReturnNullIfPersonNotFound() {
             directory.addUnique(karine);
-            Person personFound = directory.searchByName("Xavier");
-            assertNull(personFound);
+            Optional<Person> personFound = directory.searchByName("Xavier");
+            assertTrue(personFound.isEmpty());
         }
     }
 }

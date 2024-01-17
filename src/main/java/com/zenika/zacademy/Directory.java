@@ -1,6 +1,7 @@
 package com.zenika.zacademy;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 public class Directory {
@@ -14,14 +15,12 @@ public class Directory {
         persons.add(newPerson);
     }
 
-    public Person searchByName(String searchedName) {
+    public Optional<Person> searchByName(String searchedName) {
         String searchNameLowerCase = searchedName.toLowerCase();
-        for (Person currentPerson : persons) {
-            if (searchNameLowerCase.contains(currentPerson.firstName) || searchNameLowerCase.contains(currentPerson.lastName)) {
-                return currentPerson;
-            }
-        }
-        return null;
+        return persons.stream()
+                .filter((currentPerson) ->
+                        searchNameLowerCase.contains(currentPerson.firstName) || searchNameLowerCase.contains(currentPerson.lastName)
+                ).findFirst();
     }
 
 }
