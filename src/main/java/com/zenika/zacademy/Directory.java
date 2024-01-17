@@ -1,24 +1,16 @@
 package com.zenika.zacademy;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Directory {
-    private ArrayList<Person> persons = new ArrayList<>();
+    private Set<Person> persons = new HashSet<>();
 
-    public ArrayList<Person> getPersons() {
+    public Set<Person> getPersons() {
         return persons;
     }
 
     public void addUnique(Person newPerson) {
-        boolean isUnique = true;
-        for (Person person : persons) {
-            if (person.equals(newPerson)) {
-                isUnique = false;
-                break;
-            }
-        }
-        if (isUnique) {
-            persons.add(newPerson);
-        }
+        persons.add(newPerson);
     }
 }
