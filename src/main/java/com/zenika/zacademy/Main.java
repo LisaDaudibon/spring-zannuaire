@@ -1,6 +1,8 @@
 package com.zenika.zacademy;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
@@ -19,5 +21,14 @@ public class Main {
         if (personFound.isPresent()) {
             System.out.println(personFound.get());
         }
+
+        Set<Person> javatarFormers = new HashSet<>();
+        javatarFormers.add(karine);
+
+        Set<Person> javatarStudents = new HashSet<>();
+        javatarStudents.add(marina);
+
+        Promotion javatar = new Promotion(9, "javatar", javatarFormers, javatarStudents);
+        System.out.println(javatar);
     }
 }
