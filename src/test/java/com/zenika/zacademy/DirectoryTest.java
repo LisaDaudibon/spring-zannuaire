@@ -6,16 +6,20 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 class DirectoryTest {
 
-    private final Person karine = new Former("Karine", "Sabatier", "0701020304", "Rue de rennes", "karineagile4ever@yahoo.fr");
-    private final Person marina = new Student("Marina", "Assohoun", "0601020304", "Rue de dinan", "marinadu93@gmail.com");
+    private final Former karine = new Former("Karine", "Sabatier", "0701020304", "Rue de rennes", "karineagile4ever@yahoo.fr");
+    private final Student marina = new Student("Marina", "Assohoun", "0601020304", "Rue de dinan", "marinadu93@gmail.com");
     private final Directory directory = new Directory();
 
     @BeforeEach
@@ -29,23 +33,23 @@ class DirectoryTest {
         @Order(1)
         @DisplayName("Ajoute une personne dans la liste de notre annuaire")
         void shouldAddPersonInList() {
-            directory.addUnique(karine);
+            directory.addUniquePerson(karine);
             assertTrue(directory.getPersons().contains(karine));
         }
 
         @Test
         @Order(2)
         void shouldAddTwoDifferentPersonsInListIfEmailNotEquals() {
-            directory.addUnique(karine);
-            directory.addUnique(marina);
+            directory.addUniquePerson(karine);
+            directory.addUniquePerson(marina);
             assertEquals(2, directory.getPersons().size());
         }
 
         @Test
         @Order(3)
         void shouldNotAddPersonInListIfEmailAlreadyExits() {
-            directory.addUnique(karine);
-            directory.addUnique(karine);
+            directory.addUniquePerson(karine);
+            directory.addUniquePerson(karine);
             assertEquals(1, directory.getPersons().size());
         }
     }
@@ -55,37 +59,75 @@ class DirectoryTest {
 
         @Test
         void shouldReturnPersonByFirstNameIfExists() {
-            directory.addUnique(karine);
-            Optional<Person> personFound = directory.searchByName("Karine");
+            directory.addUniquePerson(karine);
+            Optional<Person> personFound = directory.searchPersonByName("Karine");
             assertEquals(karine, personFound.get());
         }
 
         @Test
         void shouldReturnPersonByLastNameIfExists() {
-            directory.addUnique(karine);
-            Optional<Person> personFound = directory.searchByName("Sabatier");
+            directory.addUniquePerson(karine);
+            Optional<Person> personFound = directory.searchPersonByName("Sabatier");
             assertEquals(karine, personFound.get());
         }
 
         @Test
         void shouldReturnPersonByFirstNameAndLastNameIfExists() {
-            directory.addUnique(karine);
-            Optional<Person> personFound = directory.searchByName("Karine Sabatier");
+            directory.addUniquePerson(karine);
+            Optional<Person> personFound = directory.searchPersonByName("Karine Sabatier");
             assertEquals(karine, personFound.get());
         }
 
         @Test
         void shouldReturnPersonByFirstNameAndLastNameWithoutCaseSensitiveIfExists() {
-            directory.addUnique(karine);
-            Optional<Person> personFound = directory.searchByName("KarINe SABatier");
+            directory.addUniquePerson(karine);
+            Optional<Person> personFound = directory.searchPersonByName("KarINe SABatier");
             assertEquals(karine, personFound.get());
         }
 
         @Test
         void shouldReturnNullIfPersonNotFound() {
-            directory.addUnique(karine);
-            Optional<Person> personFound = directory.searchByName("Xavier");
+            directory.addUniquePerson(karine);
+            Optional<Person> personFound = directory.searchPersonByName("Xavier");
             assertTrue(personFound.isEmpty());
+        }
+    }
+
+    @Nested
+    class searchPromotionById {
+
+        private Set<Former> formers = new HashSet<>() {
+            {
+                add(karine);
+            }
+        };
+
+        private Set<Student> students = new HashSet<>() {
+            {
+                add(marina);
+            }
+        };
+
+        private Promotion promotion = new Promotion(9, "Javatar", formers, students);
+
+        // Ce BeforeEach sera exécuté avant chaque test présent dans la classe searchPromotionById
+        @BeforeEach
+        void setup() {
+            directory.getPromotions().clear();
+            directory.getPromotions().add(promotion);
+        }
+
+        @Test
+        void shouldFoundPromotionById() throws PromotionNotFoundException {
+            Promotion promotion = directory.searchPromotionById(9);
+            assertNotNull(promotion);
+        }
+
+        @Test
+        void shouldNotFoundPromotionById() {
+            assertThrows(PromotionNotFoundException.class, () -> {
+                directory.searchPromotionById(1);
+            });
         }
     }
 }
