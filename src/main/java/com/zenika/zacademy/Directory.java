@@ -1,5 +1,7 @@
 package com.zenika.zacademy;
 
+import com.zenika.zacademy.exception.PromotionNotFoundException;
+
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -35,6 +37,6 @@ public class Directory {
             }
         }
 
-        throw new PromotionNotFoundException("Can not found any Promotion with id " + searchedId);
+        throw new PromotionNotFoundException("search with id " + searchedId);
     }
 }
