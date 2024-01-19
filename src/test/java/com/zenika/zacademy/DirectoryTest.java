@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -109,7 +110,7 @@ class DirectoryTest {
             }
         };
 
-        private Promotion promotion = new Promotion(9, "Javatar", formers, students);
+        private Promotion promotion = new Promotion(9, "Javatar", LocalDate.of(2022, 12, 15), formers, students);
 
         // Ce BeforeEach sera exécuté avant chaque test présent dans la classe searchPromotionById
         @BeforeEach

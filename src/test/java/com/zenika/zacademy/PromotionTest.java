@@ -2,6 +2,7 @@ package com.zenika.zacademy;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,8 +25,8 @@ class PromotionTest {
         javatarStudents.add(marina);
         javatarStudents.add(francis);
 
-        Promotion javatar = new Promotion(9, "javatar", javatarFormers, javatarStudents);
-        assertEquals("Promotion javatar N°9\n" +
+        Promotion javatar = new Promotion(9, "javatar", LocalDate.of(2022, 12, 15), javatarFormers, javatarStudents);
+        assertEquals("Promotion javatar N°9 a démarré le 15/12/2022\n" +
                 "\n" +
                 "\uD83D\uDC77 Formateurs:\n" +
                 "\n" +
@@ -57,7 +58,7 @@ class PromotionTest {
     void shouldNotAddStudentAfterInitialization() {
         Set<Former> javatarFormers = new HashSet<>();
         Set<Student> javatarStudents = new HashSet<>();
-        Promotion javatar = new Promotion(9, "javatar", javatarFormers, javatarStudents);
+        Promotion javatar = new Promotion(9, "javatar", LocalDate.of(2022, 12, 15), javatarFormers, javatarStudents);
         assertEquals(0, javatar.getStudents().size());
         javatar.getStudents().add(marina);
         assertEquals(0, javatar.getStudents().size());
@@ -67,7 +68,7 @@ class PromotionTest {
     void shouldNotAddFormerAfterInitialization() {
         Set<Former> javatarFormers = new HashSet<>();
         Set<Student> javatarStudents = new HashSet<>();
-        Promotion javatar = new Promotion(9, "javatar", javatarFormers, javatarStudents);
+        Promotion javatar = new Promotion(9, "javatar", LocalDate.of(2022, 12, 15), javatarFormers, javatarStudents);
         assertEquals(0, javatar.getFormers().size());
         javatar.getFormers().add(karine);
         assertEquals(0, javatar.getFormers().size());

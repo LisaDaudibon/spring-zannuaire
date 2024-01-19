@@ -4,6 +4,9 @@ import com.zenika.zacademy.exception.NotFoundException;
 import com.zenika.zacademy.exception.PersonNotFoundException;
 import com.zenika.zacademy.exception.PromotionNotFoundException;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Scanner;
@@ -33,7 +36,11 @@ public class Main {
         Set<Student> javatarStudents = new HashSet<>();
         javatarStudents.add(marina);
 
-        Promotion javatar = new Promotion(9, "javatar", javatarFormers, javatarStudents);
+        // new Date() => date à l'instant t
+        // LocalDate.now()
+        // new Date(2023, 12, 22);
+
+        Promotion javatar = new Promotion(9, "javatar", LocalDate.of(2023, 12, 22), javatarFormers, javatarStudents);
 
         Set<Former> javenturierFormers = new HashSet<>();
         javenturierFormers.add(karine);
@@ -41,7 +48,7 @@ public class Main {
         Set<Student> javenturierStudents = new HashSet<>();
         javenturierStudents.add(yassir);
 
-        Promotion javenturier = new Promotion(8, "javenturier", javenturierFormers, javenturierStudents);
+        Promotion javenturier = new Promotion(8, "javenturier", LocalDate.of(2022, 12, 15), javenturierFormers, javenturierStudents);
 
         // Ajout des promotions à l'annuaire
         zAcademyDirectory.getPromotions().add(javatar);
@@ -86,15 +93,17 @@ public class Main {
                 System.out.printf("Aucune donnée trouvée pour %s la recherche %s %n", exception.className, userSearch);
             } catch (Exception exception) {
                 System.out.println("Il semble y avoir un souci, veuillez réessayer. :/");
-            } finally {
-                scanner.close();
             }
         }
+
+        scanner.close();
 
     }
 
     private static void displayPromotions() {
-        System.out.println(zAcademyDirectory.getPromotions());
+        ArrayList<Promotion> promotionsList = new ArrayList<>(zAcademyDirectory.getPromotions());
+        Collections.sort(promotionsList);
+        System.out.println(promotionsList);
     }
 
     private static void displayPersonByName(String userSearch) throws PersonNotFoundException {
