@@ -1,4 +1,4 @@
-package com.zenika.zacademy;
+package com.zenika.zacademy.model;
 
 import com.zenika.zacademy.exception.PromotionNotFoundException;
 

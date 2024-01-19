@@ -1,5 +1,8 @@
 package com.zenika.zacademy;
 
+import com.zenika.zacademy.model.Former;
+import com.zenika.zacademy.model.Promotion;
+import com.zenika.zacademy.model.Student;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

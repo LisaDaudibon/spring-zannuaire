@@ -1,6 +1,11 @@
 package com.zenika.zacademy;
 
 import com.zenika.zacademy.exception.PromotionNotFoundException;
+import com.zenika.zacademy.model.Directory;
+import com.zenika.zacademy.model.Former;
+import com.zenika.zacademy.model.Person;
+import com.zenika.zacademy.model.Promotion;
+import com.zenika.zacademy.model.Student;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

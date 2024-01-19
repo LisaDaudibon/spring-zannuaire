@@ -1,122 +1,68 @@
 package com.zenika.zacademy;
 
+import com.zenika.zacademy.display.Displayer;
+import com.zenika.zacademy.display.TerminalDisplayer;
 import com.zenika.zacademy.exception.NotFoundException;
-import com.zenika.zacademy.exception.PersonNotFoundException;
-import com.zenika.zacademy.exception.PromotionNotFoundException;
+import com.zenika.zacademy.repository.InMemoryRepository;
+import com.zenika.zacademy.service.PersonService;
+import com.zenika.zacademy.service.PromotionService;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
 import java.util.Scanner;
-import java.util.Set;
 
 public class Main {
 
-    private static final Scanner scanner = new Scanner(System.in);
+    private static final InMemoryRepository repository = new InMemoryRepository();
 
-    private static final Directory zAcademyDirectory = new Directory();
+    private static final PersonService personService = new PersonService(repository);
 
-    public static void main(String[] args) {
-        // Création des données personnes
-        Student marina = new Student("Marina", "Assohoun", "0601020304", "Rue de dinan", "marinadu93@gmail.com");
-        Former karine = new Former("Karine", "Sabatier", "0701020304", "Rue de rennes", "karineagile4ever@yahoo.fr");
-        Student yassir = new Student("Yassir", "LastName", "0709087098", "rue de londres", "yassiroklm@gmail.com");
+    private static final PromotionService promotionService = new PromotionService(repository);
 
-        // Ajout des personnes à l'annuaire
-        zAcademyDirectory.addUniquePerson(karine);
-        zAcademyDirectory.addUniquePerson(marina);
-        zAcademyDirectory.addUniquePerson(yassir);
+    private static final Displayer displayer = new TerminalDisplayer();
 
-        // Création des promotions
-        Set<Former> javatarFormers = new HashSet<>();
-        javatarFormers.add(karine);
-
-        Set<Student> javatarStudents = new HashSet<>();
-        javatarStudents.add(marina);
-
-        // new Date() => date à l'instant t
-        // LocalDate.now()
-        // new Date(2023, 12, 22);
-
-        Promotion javatar = new Promotion(9, "javatar", LocalDate.of(2023, 12, 22), javatarFormers, javatarStudents);
-
-        Set<Former> javenturierFormers = new HashSet<>();
-        javenturierFormers.add(karine);
-
-        Set<Student> javenturierStudents = new HashSet<>();
-        javenturierStudents.add(yassir);
-
-        Promotion javenturier = new Promotion(8, "javenturier", LocalDate.of(2022, 12, 15), javenturierFormers, javenturierStudents);
-
-        // Ajout des promotions à l'annuaire
-        zAcademyDirectory.getPromotions().add(javatar);
-        zAcademyDirectory.getPromotions().add(javenturier);
+    public static void main(String[] args) throws InterruptedException {
 
         // Début du programme
-        System.out.println("""
+        displayer.print("""
                 Vous pouvez rechercher:
                   - Un formateur ou un élève via un nom et / ou prénom (insensible à la casse)
                   - Une promotion via un numéro de promotion
                   - La liste des promotions en tapant promotions
                     """);
 
-        boolean isRunning = true;
-        while (isRunning) {
-            String userSearch = null;
-            System.out.println("Veuillez taper votre recherche ou q pour sortir:");
-            try {
+        try (Scanner scanner = new Scanner(System.in)) {
+            boolean isRunning = true;
+            while (isRunning) {
+                Thread.sleep(1000);
+                String userSearch = null;
+                displayer.print("Veuillez taper votre recherche ou q pour sortir:");
+
                 // Cas d'une recherche par numéro de promotion
                 if (scanner.hasNextInt()) {
-                    displayPromotionById(scanner.nextInt());
+                    displayer.print(promotionService.findById(scanner.nextInt()));
                     continue;
                 }
 
                 userSearch = scanner.nextLine();
 
                 if (userSearch.equals("q")) {
-                    System.out.println("Merci d'avoir utilisé le service zAcademyAnnuaire. Des bsx");
+                    displayer.print("Merci d'avoir utilisé le service zAcademyAnnuaire. Des bsx");
                     isRunning = false;
                     continue;
                 }
 
                 // Cas d'affichage des promotions
                 if (userSearch.equals("promotions")) {
-                    displayPromotions();
+                    displayer.print(promotionService.findAll());
                     continue;
                 }
 
                 // cas d'affichage d'une personne par nom
-                displayPersonByName(userSearch);
-            } catch (NotFoundException exception) {
-                System.out.printf("Aucune donnée trouvée pour %s la recherche %s %n", exception.className, userSearch);
-            } catch (Exception exception) {
-                System.out.println("Il semble y avoir un souci, veuillez réessayer. :/");
+                displayer.print(personService.findByName(userSearch));
             }
+        } catch (NotFoundException exception) {
+            System.out.printf("Aucune donnée trouvée pour %s %n", exception.className);
+        } catch (Exception exception) {
+            displayer.print("Il semble y avoir un souci, veuillez réessayer. :/");
         }
-
-        scanner.close();
-
-    }
-
-    private static void displayPromotions() {
-        ArrayList<Promotion> promotionsList = new ArrayList<>(zAcademyDirectory.getPromotions());
-        Collections.sort(promotionsList);
-        System.out.println(promotionsList);
-    }
-
-    private static void displayPersonByName(String userSearch) throws PersonNotFoundException {
-        Optional<Person> person = zAcademyDirectory.searchPersonByName(userSearch);
-        if (person.isPresent()) {
-            System.out.println(person.get());
-        } else {
-            throw new PersonNotFoundException("search by name " + userSearch);
-        }
-    }
-
-    static void displayPromotionById(int searchId) throws PromotionNotFoundException {
-        Promotion promotion = zAcademyDirectory.searchPromotionById(searchId);
-        System.out.println(promotion);
     }
 }
