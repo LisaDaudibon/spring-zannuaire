@@ -1,8 +1,50 @@
 @startuml
-class com.zenika.zacademy.Main {
-+ {static} void main(String[])
+class com.zenika.zacademy.model.Promotion {
+- int id
+- String name
+- LocalDate startDate
+- Set<Former> formers
+- Set<Student> students
++ int getId()
++ Set<Former> getFormers()
++ Set<Student> getStudents()
++ String toString()
++ int compareTo(Promotion)
 }
-abstract class com.zenika.zacademy.Person {
+class com.zenika.zacademy.display.FileDisplayer {
++ void print(Object)
+}
+class com.zenika.zacademy.repository.InMemoryPromotionRepository {
+- {static} int NUMBER_OF_DATA
+- Set<Promotion> promotions
++ Set<Promotion> getPromotions()
++ Optional<Promotion> findById(int)
+}
+class com.zenika.zacademy.exception.PromotionNotFoundException {
+}
+class com.zenika.zacademy.exception.NotFoundException {
++ String className
+}
+interface com.zenika.zacademy.repository.PersonRepository {
+~ Set<Person> getDirectory()
+~ Optional<Person> findByName(String)
+}
+interface com.zenika.zacademy.repository.PromotionRepository {
+~ Set<Promotion> getPromotions()
+~ Optional<Promotion> findById(int)
+}
+class com.zenika.zacademy.model.Former {
++ String toString()
+}
+class com.zenika.zacademy.service.PersonService {
+- PersonRepository repository
++ Person findByName(String)
+}
+class com.zenika.zacademy.mock.PersonMock {
+- {static} Faker faker
++ {static} Person generateFakePerson()
+}
+abstract class com.zenika.zacademy.model.Person {
 + String firstName
 + String lastName
 + String phoneNumber
@@ -11,47 +53,51 @@ abstract class com.zenika.zacademy.Person {
 + boolean equals(Object)
 + int hashCode()
 }
-class com.zenika.zacademy.Student {
+class com.zenika.zacademy.Main {
+- {static} PersonRepository personRepository
+- {static} PromotionRepository promotionRepository
+- {static} PromotionService promotionService
+- {static} PersonService personService
+- {static} Displayer displayer
++ {static} void main(String[])
+}
+class com.zenika.zacademy.repository.InMemoryPersonRepository {
+- {static} int NUMBER_OF_DATA
+- Set<Person> directory
++ Set<Person> getDirectory()
++ Optional<Person> findByName(String)
+}
+class com.zenika.zacademy.model.Student {
 + String toString()
 }
-class com.zenika.zacademy.PromotionNotFoundException {
+class com.zenika.zacademy.display.TerminalDisplayer {
++ void print(Object)
 }
-class com.zenika.zacademy.display.CheckNorrisDisplay {
-+ void print(String)
+class com.zenika.zacademy.mock.PromotionMock {
+- {static} Faker faker
+- {static} int promoConter
++ {static} Promotion generateFakePromotion(Set<Student>,Set<Former>)
 }
-class com.zenika.zacademy.Former {
-+ String toString()
+class com.zenika.zacademy.service.PromotionService {
+- PromotionRepository repository
++ ArrayList<Promotion> findAll()
++ Promotion findById(int)
 }
-interface com.zenika.zacademy.display.Display {
-~ void print(String)
+class com.zenika.zacademy.exception.PersonNotFoundException {
 }
-class com.zenika.zacademy.Directory {
-- Set<Promotion> promotions
-- Set<Person> persons
-+ Set<Person> getPersons()
-+ Set<Promotion> getPromotions()
-+ void addUniquePerson(Person)
-+ Optional<Person> searchPersonByName(String)
-+ Promotion searchPromotionById(int)
-}
-class com.zenika.zacademy.Promotion {
-- int id
-- String name
-- Set<Former> formers
-- Set<Student> students
-+ int getId()
-+ Set<Former> getFormers()
-+ Set<Student> getStudents()
-+ String toString()
-}
-class com.zenika.zacademy.display.TerminalDisplay {
-+ void print(String)
+interface com.zenika.zacademy.display.Displayer {
+~ void print(Object)
 }
 
 
-com.zenika.zacademy.Person <|-- com.zenika.zacademy.Student
-com.zenika.zacademy.Exception <|-- com.zenika.zacademy.PromotionNotFoundException
-com.zenika.zacademy.display.Display <|.. com.zenika.zacademy.display.CheckNorrisDisplay
-com.zenika.zacademy.Person <|-- com.zenika.zacademy.Former
-com.zenika.zacademy.display.Display <|.. com.zenika.zacademy.display.TerminalDisplay
+com.zenika.zacademy.model.Comparable <|.. com.zenika.zacademy.model.Promotion
+com.zenika.zacademy.display.Displayer <|.. com.zenika.zacademy.display.FileDisplayer
+com.zenika.zacademy.repository.PromotionRepository <|.. com.zenika.zacademy.repository.InMemoryPromotionRepository
+com.zenika.zacademy.exception.NotFoundException <|-- com.zenika.zacademy.exception.PromotionNotFoundException
+com.zenika.zacademy.exception.Exception <|-- com.zenika.zacademy.exception.NotFoundException
+com.zenika.zacademy.model.Person <|-- com.zenika.zacademy.model.Former
+com.zenika.zacademy.repository.PersonRepository <|.. com.zenika.zacademy.repository.InMemoryPersonRepository
+com.zenika.zacademy.model.Person <|-- com.zenika.zacademy.model.Student
+com.zenika.zacademy.display.Displayer <|.. com.zenika.zacademy.display.TerminalDisplayer
+com.zenika.zacademy.exception.NotFoundException <|-- com.zenika.zacademy.exception.PersonNotFoundException
 @enduml
