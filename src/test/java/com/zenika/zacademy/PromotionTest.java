@@ -1,15 +1,22 @@
 package com.zenika.zacademy;
 
+import com.zenika.zacademy.exception.PromotionNotFoundException;
 import com.zenika.zacademy.model.Former;
 import com.zenika.zacademy.model.Promotion;
 import com.zenika.zacademy.model.Student;
+import com.zenika.zacademy.repository.InMemoryPersonRepository;
+import com.zenika.zacademy.repository.InMemoryPromotionRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PromotionTest {
 
@@ -17,6 +24,8 @@ class PromotionTest {
     private final Former xavier = new Former("Xavier", "Cassel", "0702020304", "Rue de nantes", "xavaxdu35@hotmail.fr");
     private final Student marina = new Student("Marina", "Assohoun", "0601020304", "Rue de dinan", "marinadu93@gmail.com");
     private final Student francis = new Student("Francis", "Rouxel", "0609020304", "Rue de paris", "franciiiiis@gmail.com");
+
+    private final InMemoryPromotionRepository repository = new InMemoryPromotionRepository(new InMemoryPersonRepository());
 
     @Test
     void shouldDisplayCorrectlyMyPromotion() {
@@ -77,5 +86,41 @@ class PromotionTest {
         assertEquals(0, javatar.getFormers().size());
     }
 
+    @Nested
+    class searchPromotionById {
+
+        private Set<Former> formers = new HashSet<>() {
+            {
+                add(karine);
+            }
+        };
+
+        private Set<Student> students = new HashSet<>() {
+            {
+                add(marina);
+            }
+        };
+
+        private Promotion promotion = new Promotion(9, "Javatar", LocalDate.of(2022, 12, 15), formers, students);
+
+        // Ce BeforeEach sera exécuté avant chaque test présent dans la classe searchPromotionById
+        @BeforeEach
+        void setup() {
+            repository.getPromotions().clear();
+            repository.getPromotions().add(promotion);
+        }
+
+        @Test
+        void shouldFoundPromotionById() throws PromotionNotFoundException {
+            Optional<Promotion> promotion = repository.findById(9);
+            assertTrue(promotion.isPresent());
+        }
+
+        @Test
+        void shouldNotFoundPromotionById() {
+            Optional<Promotion> promotion = repository.findById(10);
+            assertTrue(promotion.isEmpty());
+        }
+    }
 
 }

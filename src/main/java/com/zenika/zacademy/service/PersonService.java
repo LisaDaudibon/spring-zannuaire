@@ -2,24 +2,17 @@ package com.zenika.zacademy.service;
 
 import com.zenika.zacademy.exception.PersonNotFoundException;
 import com.zenika.zacademy.model.Person;
-import com.zenika.zacademy.repository.InMemoryRepository;
-
-import java.util.Optional;
+import com.zenika.zacademy.repository.PersonRepository;
 
 public class PersonService {
 
-    private final InMemoryRepository repository;
+    private final PersonRepository repository;
 
-    public PersonService(InMemoryRepository repository) {
+    public PersonService(PersonRepository repository) {
         this.repository = repository;
     }
 
     public Person findByName(String searchedName) throws PersonNotFoundException {
-        Optional<Person> person = repository.getAcademyDirectory().searchPersonByName(searchedName);
-        if (person.isPresent()) {
-            return person.get();
-        } else {
-            throw new PersonNotFoundException("search by name " + searchedName);
-        }
+        return repository.findByName(searchedName).orElseThrow(() -> new PersonNotFoundException("search by name " + searchedName));
     }
 }
