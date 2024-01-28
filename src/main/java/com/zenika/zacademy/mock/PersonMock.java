@@ -19,6 +19,8 @@ public class PersonMock {
         PhoneNumber phoneNumber = faker.phoneNumber();
         Address address = faker.address();
         Internet internet = faker.internet();
-        return isAdmin ? new Former(name.firstName(), name.lastName(), phoneNumber.phoneNumber(), internet.emailAddress(), address.fullAddress()) : new Student(name.firstName(), name.lastName(), phoneNumber.phoneNumber(), internet.emailAddress(), address.fullAddress());
+        return isAdmin ? 
+            new Former(name.firstName(), name.lastName(), phoneNumber.phoneNumber(), address.fullAddress(), internet.emailAddress()) : 
+            new Student(name.firstName(), name.lastName(), phoneNumber.phoneNumber(), address.fullAddress(), internet.emailAddress());
     }
 }
