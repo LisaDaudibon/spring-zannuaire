@@ -24,6 +24,9 @@ public class Promotion implements Comparable<Promotion> {
     public int getId() {
         return id;
     }
+    public String getName() {
+        return name;
+    }
 
     public Set<Former> getFormers() {
         // Permet de rendre immuable la liste des formateurs
@@ -61,4 +64,5 @@ public class Promotion implements Comparable<Promotion> {
     public int compareTo(Promotion comparedPromotion) {
         return this.startDate.compareTo(comparedPromotion.startDate);
     }
+
 }
