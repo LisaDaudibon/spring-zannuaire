@@ -24,16 +24,10 @@ public class InMemoryPromotionRepository implements PromotionRepository {
     // Représente ma base de données
     private final Set<Promotion> promotions = new HashSet<>();
 
-    public InMemoryPromotionRepository(PersonRepository personRepository) {
+    private PersonRepository personRepository;
 
-        int numberOfPersonPerPromotion = personRepository.getDirectory().size() / 10;
+    public InMemoryPromotionRepository() {
 
-        for (int i = 0; i < numberOfPersonPerPromotion; i++) {
-            List<Person> subList = new ArrayList<>(personRepository.getDirectory()).subList(i * NUMBER_OF_DATA, i * NUMBER_OF_DATA + NUMBER_OF_DATA);
-            Set<Student> students = subList.stream().filter(p -> p instanceof Student).map(Student.class::cast).collect(Collectors.toSet());
-            Set<Former> formers = subList.stream().filter(p -> p instanceof Former).map(Former.class::cast).collect(Collectors.toSet());
-            promotions.add(generateFakePromotion(students, formers));
-        }
     }
 
 
@@ -45,5 +39,16 @@ public class InMemoryPromotionRepository implements PromotionRepository {
     @Override
     public Optional<Promotion> findById(int promoNumber) {
         return promotions.stream().filter(promotion -> promotion.getId() == promoNumber).findAny();
+    }
+
+    public void setPersonRepository(PersonRepository personRepository) {
+        int numberOfPersonPerPromotion = personRepository.getDirectory().size() / 10;
+
+        for (int i = 0; i < numberOfPersonPerPromotion; i++) {
+            List<Person> subList = new ArrayList<>(personRepository.getDirectory()).subList(i * NUMBER_OF_DATA, i * NUMBER_OF_DATA + NUMBER_OF_DATA);
+            Set<Student> students = subList.stream().filter(p -> p instanceof Student).map(Student.class::cast).collect(Collectors.toSet());
+            Set<Former> formers = subList.stream().filter(p -> p instanceof Former).map(Former.class::cast).collect(Collectors.toSet());
+            promotions.add(generateFakePromotion(students, formers));
+        }
     }
 }

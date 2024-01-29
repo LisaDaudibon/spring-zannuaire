@@ -1,7 +1,6 @@
 package com.zenika.zacademy;
 
 import com.zenika.zacademy.display.Displayer;
-import com.zenika.zacademy.display.TerminalDisplayer;
 import com.zenika.zacademy.exception.NotFoundException;
 import com.zenika.zacademy.repository.InMemoryPersonRepository;
 import com.zenika.zacademy.repository.InMemoryPromotionRepository;
@@ -9,19 +8,25 @@ import com.zenika.zacademy.repository.PersonRepository;
 import com.zenika.zacademy.repository.PromotionRepository;
 import com.zenika.zacademy.service.PersonService;
 import com.zenika.zacademy.service.PromotionService;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.Scanner;
 
 public class Main {
 
     private static final PersonRepository personRepository = new InMemoryPersonRepository();
-    private static final PromotionRepository promotionRepository = new InMemoryPromotionRepository(personRepository);
-    private static final PromotionService promotionService = new PromotionService(promotionRepository);
+//    private static final PromotionRepository promotionRepository = new InMemoryPromotionRepository(personRepository);
+//    private static final PromotionService promotionService = new PromotionService(promotionRepository);
     private static final PersonService personService = new PersonService(personRepository);
-    private static final Displayer displayer = new TerminalDisplayer();
 
     public static void main(String[] args) {
-
+        // On va créer notre context à partir d'un fichier de configuration XML
+        // Cette ligne permet de récupérer le context applicatif de notre application Spring (conteneur léger)
+        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+        // Récupération de notre class via le nom de la classe (mais il faut l'avoir défini dans votre fichier de configuration)
+        Displayer displayer = context.getBean(Displayer.class);
+        PromotionService promotionService = context.getBean(PromotionService.class);
         // Début du programme
         displayer.print("""
                 Vous pouvez rechercher:
@@ -48,7 +53,7 @@ public class Main {
                     userSearch = scanner.nextLine();
 
                     // Permet de corriger les soucis de lignes vides
-                    // Exemple tapez 90, puis q. Vous verrez que la prochaine ligne vaudra une chaîne de caractères vide ...
+                    // Exemple, tapez 90, puis q. Vous verrez que la prochaine ligne vaudra une chaîne de caractères vide ...
                     if (userSearch.equals("")) {
                         userSearch = scanner.nextLine();
                     }

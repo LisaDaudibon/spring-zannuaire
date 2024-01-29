@@ -9,9 +9,17 @@ import java.util.Collections;
 
 public class PromotionService {
 
-    private final PromotionRepository repository;
+    private PromotionRepository repository;
 
     public PromotionService(PromotionRepository repository) {
+        this.repository = repository;
+    }
+
+    public PromotionService(){
+
+    }
+
+    public void setRepository(PromotionRepository repository) {
         this.repository = repository;
     }
 

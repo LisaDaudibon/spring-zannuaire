@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       https://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean class="com.zenika.zacademy.display.TerminalDisplayer"/>
+    <bean id="promotionRepositoryRef" class="com.zenika.zacademy.repository.InMemoryPromotionRepository" >
+        <property ref="personRepositoryRef" name="personRepository"/>
+    </bean>
+    <bean class="com.zenika.zacademy.service.PromotionService">
+        <property ref="promotionRepositoryRef" name="repository"/>
+    </bean>
+    <bean id="personRepositoryRef" class="com.zenika.zacademy.repository.InMemoryPersonRepository" />
+</beans>
+
