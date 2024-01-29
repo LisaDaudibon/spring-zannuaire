@@ -3,23 +3,17 @@ package com.zenika.zacademy.service;
 import com.zenika.zacademy.exception.PromotionNotFoundException;
 import com.zenika.zacademy.model.Promotion;
 import com.zenika.zacademy.repository.PromotionRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
+@Service
 public class PromotionService {
 
-    private PromotionRepository repository;
+    private final PromotionRepository repository;
 
     public PromotionService(PromotionRepository repository) {
-        this.repository = repository;
-    }
-
-    public PromotionService(){
-
-    }
-
-    public void setRepository(PromotionRepository repository) {
         this.repository = repository;
     }
 

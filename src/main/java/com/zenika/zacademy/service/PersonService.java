@@ -3,9 +3,10 @@ package com.zenika.zacademy.service;
 import com.zenika.zacademy.exception.PersonNotFoundException;
 import com.zenika.zacademy.model.Person;
 import com.zenika.zacademy.repository.PersonRepository;
+import org.springframework.stereotype.Service;
+@Service
 
 public class PersonService {
-
     private final PersonRepository repository;
 
     public PersonService(PersonRepository repository) {

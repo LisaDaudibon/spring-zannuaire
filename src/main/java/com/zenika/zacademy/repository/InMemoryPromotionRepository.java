@@ -4,6 +4,7 @@ import com.zenika.zacademy.model.Former;
 import com.zenika.zacademy.model.Person;
 import com.zenika.zacademy.model.Promotion;
 import com.zenika.zacademy.model.Student;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,6 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.zenika.zacademy.mock.PromotionMock.generateFakePromotion;
+@Repository
 
 /**
  * Représente une base de données in memory pour la gestion des promotions
@@ -24,12 +26,17 @@ public class InMemoryPromotionRepository implements PromotionRepository {
     // Représente ma base de données
     private final Set<Promotion> promotions = new HashSet<>();
 
-    private PersonRepository personRepository;
+    public InMemoryPromotionRepository(PersonRepository personRepository) {
 
-    public InMemoryPromotionRepository() {
+        int numberOfPersonPerPromotion = personRepository.getDirectory().size() / 10;
 
+        for (int i = 0; i < numberOfPersonPerPromotion; i++) {
+            List<Person> subList = new ArrayList<>(personRepository.getDirectory()).subList(i * NUMBER_OF_DATA, i * NUMBER_OF_DATA + NUMBER_OF_DATA);
+            Set<Student> students = subList.stream().filter(p -> p instanceof Student).map(Student.class::cast).collect(Collectors.toSet());
+            Set<Former> formers = subList.stream().filter(p -> p instanceof Former).map(Former.class::cast).collect(Collectors.toSet());
+            promotions.add(generateFakePromotion(students, formers));
+        }
     }
-
 
     @Override
     public Set<Promotion> getPromotions() {
@@ -41,14 +48,4 @@ public class InMemoryPromotionRepository implements PromotionRepository {
         return promotions.stream().filter(promotion -> promotion.getId() == promoNumber).findAny();
     }
 
-    public void setPersonRepository(PersonRepository personRepository) {
-        int numberOfPersonPerPromotion = personRepository.getDirectory().size() / 10;
-
-        for (int i = 0; i < numberOfPersonPerPromotion; i++) {
-            List<Person> subList = new ArrayList<>(personRepository.getDirectory()).subList(i * NUMBER_OF_DATA, i * NUMBER_OF_DATA + NUMBER_OF_DATA);
-            Set<Student> students = subList.stream().filter(p -> p instanceof Student).map(Student.class::cast).collect(Collectors.toSet());
-            Set<Former> formers = subList.stream().filter(p -> p instanceof Former).map(Former.class::cast).collect(Collectors.toSet());
-            promotions.add(generateFakePromotion(students, formers));
-        }
-    }
 }
